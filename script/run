@@ -1,0 +1,41 @@
+#!/bin/sh
+
+# script/run: Execute the playbook
+#
+#   Examples: script/run playbook.yml
+#             script/run playbook.yml -v
+
+set -e
+
+cd "$(dirname "$0")/.."
+
+venv="./.venv"
+
+# Fail if the Python virtual environment does not yet exist
+if [ ! -d "$venv" ]; then
+  echo 'Huh, no virtual environment? Did you run `script/setup` already?'
+  exit 2
+fi
+
+# Activate the Python virtual environment
+. "$venv/bin/activate"
+
+PLAYBOOK_PATH="$(dirname $1)"
+PLAYBOOK_NAME="$(basename $1)"
+
+pushd ${PLAYBOOK_PATH}
+  echo
+
+  # Lint Ansible playbook
+  echo "==> Linting playbook…"
+  ansible-lint "${PLAYBOOK_NAME}" "${2}"
+  echo "Done."
+  echo
+
+  # Run Ansible playbook
+  echo "==> Running playbook…"
+  ansible-playbook "${PLAYBOOK_NAME}" "${2}"
+  echo "Done."
+
+  echo
+popd

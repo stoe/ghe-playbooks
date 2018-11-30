@@ -1,0 +1,27 @@
+---
+all:
+  vars:
+    ansible_ssh_common_args: -o StrictHostKeyChecking=no
+  children:
+    localhost:
+      vars:
+        ansible_connection: local
+    ghe:
+      vars:
+        ansible_port: 122
+        ansible_user: admin
+        ansible_ssh_private_key_file: /path/to/id_rsa
+      hosts:
+        github_primary:
+          ansible_host: github.example.com
+        github_replica:
+          ansible_host: 1.1.1.1
+    backup:
+      vars:
+        home_dir: '~/backup-utils'
+        data_dir: '~/backup-utils/data'
+      hosts:
+        github_backup:
+          ansible_user: ubuntu
+          ansible_host: 2.2.2.2
+          ansible_ssh_private_key_file: /path/to/id_rsa
