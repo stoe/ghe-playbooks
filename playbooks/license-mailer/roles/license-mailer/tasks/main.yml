@@ -1,0 +1,2 @@
+---
+- debug: msg="GitHub Enterprise license usage mailer playbook"
