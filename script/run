@@ -22,19 +22,20 @@ fi
 
 PLAYBOOK_PATH="$(dirname $1)"
 PLAYBOOK_NAME="$(basename $1)"
+EXTRA_OPTIONS="${2:-}"
 
 pushd ${PLAYBOOK_PATH}
   echo
 
   # Lint Ansible playbook
   echo "==> Linting playbook…"
-  ansible-lint "${PLAYBOOK_NAME}" "${2}"
+  ansible-lint "${PLAYBOOK_NAME}" ${EXTRA_OPTIONS}
   echo "Done."
   echo
 
   # Run Ansible playbook
   echo "==> Running playbook…"
-  ansible-playbook "${PLAYBOOK_NAME}" "${2}"
+  ansible-playbook "${PLAYBOOK_NAME}" ${EXTRA_OPTIONS}
   echo "Done."
 
   echo
