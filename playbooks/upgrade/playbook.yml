@@ -1,6 +1,24 @@
 ---
-- hosts: localhost
+- hosts: github_primary
   gather_facts: false
 
-  tasks:
-    - debug: msg="GitHub Enterprise upgrade automation playbook"
+  roles:
+    - ghe-version
+
+- hosts: github_replica
+  gather_facts: false
+
+  roles:
+    - ghe-version
+
+- hosts: github_primary
+  gather_facts: false
+
+  roles:
+    - ghe-update
+
+- hosts: github_replica
+  gather_facts: false
+
+  roles:
+    - ghe-update
