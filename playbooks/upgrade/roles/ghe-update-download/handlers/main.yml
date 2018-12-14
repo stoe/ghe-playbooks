@@ -62,3 +62,9 @@
     - pkg_download_files is defined
     - pkg_download_files.stdout is defined
     - '"Your GitHub Enterprise install is currently on the latest release." in pkg_download_files.stdout'
+
+- name: is upgrade to new feature version
+  fail: msg="[ABORT] upgrade to new feature versnio (v{{ hostvars[inventory_hostname].pkg_version_full }}) not allowed"
+  when:
+    - hostvars[inventory_hostname].pkg_version_patch is defined
+    - hostvars[inventory_hostname].pkg_version_patch | int == 0

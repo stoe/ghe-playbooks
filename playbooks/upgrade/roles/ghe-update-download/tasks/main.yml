@@ -17,6 +17,7 @@
     - save pkg filepath from predownload
     - parse pkg file info
     - currently on the latest release
+    - is upgrade to new feature version
 
 ## run ghe-update-check to download the upgrade package
 ## only executed if update pkg|hpkg wasn't downloaded automaticall/manually
@@ -28,4 +29,5 @@
     - save pkg filepath from download
     - parse pkg file info
     - currently on the latest release
+    - is upgrade to new feature version
   when: pkg_update_files.matched == 0
