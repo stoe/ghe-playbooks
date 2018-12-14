@@ -18,3 +18,8 @@
   gather_facts: false
   roles:
     - ghe-update-download
+
+- hosts: backup
+  gather_facts: false
+  roles:
+    - backup-update
