@@ -1,1 +1,12 @@
 ---
+## auto update backup-utils (to keep in line with ghe)
+## see: https://git.io/fAUUJ
+- name: update backup utils
+  git:
+    repo: https://github.com/github/backup-utils.git
+    dest: "{{ hostvars['github_backup']['home_dir'] }}"
+    version: stable
+    update: yes
+    force: yes
+  register: backup_utils
+  changed_when: backup_utils.after != backup_utils.before

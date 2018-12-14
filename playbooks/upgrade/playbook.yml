@@ -19,7 +19,7 @@
   roles:
     - ghe-update-download
 
-- hosts: backup
+- hosts: github_backup
   gather_facts: false
   roles:
     - backup-update
