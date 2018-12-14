@@ -21,3 +21,9 @@
       - ghe_version_minor: '{{ hostvars[inventory_hostname].ghe_version_minor }}'
       - ghe_version_patch: '{{ hostvars[inventory_hostname].ghe_version_patch }}'
     verbosity: 1
+
+- name: compare ghe versions
+  fail: msg="[ABORT] Primary (v{{ hostvars['github_primary'].ghe_version_full }}) Replica (v{{ hostvars['github_replica'].ghe_version_full }}) versions must be identical"
+  when:
+    - hostvars['github_replica'].ghe_version_full is defined
+    - hostvars['github_primary'].ghe_version_full != hostvars['github_replica'].ghe_version_full
