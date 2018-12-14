@@ -3,7 +3,7 @@
 - name: read current ghe version
   command: ghe-version
   register: ghe_version
-  changed_when: ghe_version.rc == 0
+  changed_when: false
   notify:
     - save ghe version info
     - parse ghe version info

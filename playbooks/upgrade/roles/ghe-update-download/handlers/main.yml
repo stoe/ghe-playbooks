@@ -17,7 +17,8 @@
   vars:
     version_regex: '([0-9]+)\.([0-9]+)\.([0-9]+)'
   when:
-    - '"Your GitHub Enterprise install is currently on the latest release." not in pkg_download_files.stdout'
+    - pkg_update_files is defined
+    - pkg_update_files.matched != 0
 
 - name: save pkg filepath from download
   # save the `pkg_filepath`
@@ -38,6 +39,8 @@
     path_regexp: '(-->.*)\s(\/.*\.(pkg|hpkg))'
     version_regex: '([0-9]+)\.([0-9]+)\.([0-9]+)'
   when:
+    - pkg_download_files is defined
+    - pkg_download_files.stdout is defined
     - '"Your GitHub Enterprise install is currently on the latest release." not in pkg_download_files.stdout'
 
 - name: parse pkg file info
@@ -51,9 +54,11 @@
       - is_hotpatch: '{{ hostvars[inventory_hostname].is_hotpatch }}'
     verbosity: 1
   when:
-    - '"Your GitHub Enterprise install is currently on the latest release." not in pkg_download_files.stdout'
+    - pkg_filepath is defined
 
 - name: currently on the latest release
   fail: msg="[ABORT] Already on the latest release v{{ hostvars[inventory_hostname].ghe_version_full }}"
   when:
+    - pkg_download_files is defined
+    - pkg_download_files.stdout is defined
     - '"Your GitHub Enterprise install is currently on the latest release." in pkg_download_files.stdout'

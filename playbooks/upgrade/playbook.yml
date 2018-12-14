@@ -1,24 +1,20 @@
 ---
 - hosts: github_primary
   gather_facts: false
-
   roles:
     - ghe-version
 
 - hosts: github_replica
   gather_facts: false
-
   roles:
     - ghe-version
 
 - hosts: github_primary
   gather_facts: false
-
   roles:
-    - ghe-update
+    - ghe-update-download
 
 - hosts: github_replica
   gather_facts: false
-
   roles:
-    - ghe-update
+    - ghe-update-download
