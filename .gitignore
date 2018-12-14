@@ -1,10 +1,7 @@
-.venv
-inventory.yml
-
-# Created by https://www.gitignore.io/api/ansible
-# Edit at https://www.gitignore.io/?templates=ansible
+.venv/
+**/inventory
+**/inventory.yml
+**/vars/main.yml
 
 ### Ansible ###
 *.retry
-
-# End of https://www.gitignore.io/api/ansible
