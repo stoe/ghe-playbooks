@@ -14,10 +14,11 @@
   changed_when: pkg_update_files.matched != 0
   ignore_errors: yes
   notify:
-    - save pkg filepath from predownload
+    - save pkg filepath from automatic/manual download
     - parse pkg file info
     - currently on the latest release
     - is upgrade to new feature version
+    - compare download pkg versions
 
 ## run ghe-update-check to download the upgrade package
 ## only executed if update pkg|hpkg wasn't downloaded automaticall/manually
@@ -30,4 +31,5 @@
     - parse pkg file info
     - currently on the latest release
     - is upgrade to new feature version
+    - compare download pkg versions
   when: pkg_update_files.matched == 0
