@@ -1,0 +1,10 @@
+---
+## retrieve ghe versions installed (primary & replica)
+- name: read current ghe version
+  command: ghe-version
+  register: ghe_version
+  changed_when: true
+  notify:
+    - save ghe version info
+    - parse ghe version info
+    - compare ghe versions

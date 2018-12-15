@@ -1,0 +1,11 @@
+---
+## stop maintenance mode
+- name: unset maintenance mode
+  delegate_to: github_primary
+  command: ghe-maintenance -u
+  register: maintenance_mode_unset
+  changed_when: true
+  failed_when: maintenance_mode_unset.rc != 0
+  when:
+    - hostvars['github_primary'].maintenance_mode_set.rc is defined
+    - hostvars['github_primary'].maintenance_mode_set.rc == 0

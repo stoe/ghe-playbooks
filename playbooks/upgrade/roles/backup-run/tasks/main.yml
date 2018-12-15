@@ -1,0 +1,35 @@
+---
+## check that backup utils directories are available as defined
+## NOTE: if `data_dir` is on a mounted drive,
+##       we might want to ensure it is mounted
+##       see https://docs.ansible.com/ansible/latest/modules/mount_module.html
+- name: ensure ghe backup utils directories are present
+  file:
+    state: directory
+    path: '{{ item }}'
+  with_items:
+    - "{{ hostvars.github_backup.home_dir }}"
+    - "{{ hostvars.github_backup.data_dir }}"
+  become: no
+
+## wait untill no backup process is running
+## this is so we do not backup during another (e.g. daily) backup run
+- name: wait for backup utils to finish
+  ## see: http://docs.ansible.com/ansible/latest/modules/wait_for_module.html
+  wait_for:
+    path: "{{ hostvars.github_backup.data_dir }}/in-progress"
+    ## retry every 10 seconds
+    delay: 10
+    ## timeout after 300 seconds (5 minutes)
+    timeout: 300
+    ## wait for file to be gone
+    state: absent
+
+## create a backup
+- name: run ghe backup utils
+  command: "{{ hostvars.github_backup.home_dir }}/bin/ghe-backup"
+  register: backup_run
+  changed_when:
+    - '"Completed backup of " in backup_run.stdout'
+  failed_when:
+    - '"Error" in backup_run.stdout'

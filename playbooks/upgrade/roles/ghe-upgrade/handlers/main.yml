@@ -1,0 +1,10 @@
+---
+## tell the user that we require a propper reboot
+## only applies to hpkg (hotpatch)
+- name: hpkg reboot required
+  set_fact:
+    messages: "{{ messages }} + ['[WARNING]: reboot required after hotpach (hpkg)']"
+  when:
+    - ghe_upgraded is defined
+    - '"require an appliance reboot" in ghe_upgraded.stdout'
+    - hostvars[inventory_hostname].is_hotpatch

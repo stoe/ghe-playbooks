@@ -2,13 +2,14 @@
 
 # script/run: Execute the playbook
 #
-#   Examples: script/run playbook.yml
-#             script/run playbook.yml -v
+#   Examples: script/run path/to/playbook.yml
+#             script/run path/to/playbook.yml -v
 
 set -e
 
 cd "$(dirname "$0")/.."
 
+start=`date +%s` # Start time in seconds
 venv="./.venv"
 
 # Fail if the Python virtual environment does not yet exist
@@ -40,3 +41,12 @@ pushd ${PLAYBOOK_PATH}
 
   echo
 popd
+
+end=`date +%s` # End time in seconds
+runtime=$((end-start)) # Total elapsed time in seconds
+minutes=$((runtime/60)) # Calculate minutes
+seconds=$((runtime%60)) # Calculate seconds
+
+echo
+echo "==> Total execution time: $minutes minutes and $seconds seconds"
+echo

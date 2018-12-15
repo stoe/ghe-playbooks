@@ -1,0 +1,9 @@
+---
+## start replication
+- name: start replication
+  command: ghe-repl-start
+  register: ghe_repl_start
+  failed_when: ghe_repl_start.rc != 0
+  when:
+    - hostvars['github_replica'].ghe_repl_stop.rc is defined
+    - hostvars['github_replica'].ghe_repl_stop.rc == 0
