@@ -56,12 +56,14 @@
 - name: update ghe (primary)
   hosts: github_primary
   gather_facts: false
-  roles: []
+  roles:
+    - role: ghe-upgrade
 
 - name: update ghe (replica)
   hosts: github_replica
   gather_facts: false
-  roles: []
+  roles:
+    - role: ghe-upgrade
 
 - name: start replication
   hosts: github_replica
