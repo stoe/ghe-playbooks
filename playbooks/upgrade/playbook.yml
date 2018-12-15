@@ -1,25 +1,65 @@
----
-- hosts: github_primary
+- name: get ghe version (primary)
+  hosts: github_primary
   gather_facts: false
   roles:
     - ghe-version
 
-- hosts: github_replica
+- name: get ghe version (replica)
+  hosts: github_replica
   gather_facts: false
   roles:
     - ghe-version
 
-- hosts: github_primary
+- name: check/download update package (primary)
+  hosts: github_primary
   gather_facts: false
   roles:
     - ghe-update-download
 
-- hosts: github_replica
+- name: check/download update package (replica)
+  hosts: github_replica
   gather_facts: false
   roles:
     - ghe-update-download
 
-- hosts: github_backup
+- name: update backup-utils
+  hosts: github_backup
   gather_facts: false
   roles:
     - backup-update
+
+- name: set maintenance mode
+  hosts: github_primary
+  gather_facts: false
+  roles: []
+
+- name: create a backup
+  hosts: github_backup
+  gather_facts: false
+  roles:
+    - backup-run
+
+- name: stop replication
+  hosts: github_replica
+  gather_facts: false
+  roles: []
+
+- name: update ghe (primary)
+  hosts: github_primary
+  gather_facts: false
+  roles: []
+
+- name: update ghe (replica)
+  hosts: github_replica
+  gather_facts: false
+  roles: []
+
+- name: start replication
+  hosts: github_replica
+  gather_facts: false
+  roles: []
+
+- name: unset maintenance mode
+  hosts: github_primary
+  gather_facts: false
+  roles: []
