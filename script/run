@@ -9,6 +9,7 @@ set -e
 
 cd "$(dirname "$0")/.."
 
+start=`date +%s` # Start time in seconds
 venv="./.venv"
 
 # Fail if the Python virtual environment does not yet exist
@@ -40,3 +41,12 @@ pushd ${PLAYBOOK_PATH}
 
   echo
 popd
+
+end=`date +%s` # End time in seconds
+runtime=$((end-start)) # Total elapsed time in seconds
+minutes=$((runtime/60)) # Calculate minutes
+seconds=$((runtime%60)) # Calculate seconds
+
+echo
+echo "==> Total execution time: $minutes minutes and $seconds seconds"
+echo
