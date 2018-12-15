@@ -79,6 +79,18 @@
     - role: ghe-maintenance-unset
       when: not hostvars['github_primary'].is_hotpatch
 
+- name: cleanup (primary)
+  hosts: github_primary
+  gather_facts: false
+  roles:
+    - role: ghe-cleanup
+
+- name: cleanup (replica)
+  hosts: github_replica
+  gather_facts: false
+  roles:
+    - role: ghe-cleanup
+
 - name: summarise plays
   hosts: localhost
   tasks:
