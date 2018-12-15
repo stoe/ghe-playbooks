@@ -40,16 +40,18 @@
         sleep: 5
       when: not hostvars['github_primary'].is_hotpatch
 
+- name: stop replication
+  hosts: github_replica
+  gather_facts: false
+  roles:
+    - role: ghe-repl-stop
+      when: not hostvars['github_primary'].is_hotpatch
+
 - name: create a backup
   hosts: github_backup
   gather_facts: false
   roles:
     - backup-run
-
-- name: stop replication
-  hosts: github_replica
-  gather_facts: false
-  roles: []
 
 - name: update ghe (primary)
   hosts: github_primary
@@ -64,7 +66,9 @@
 - name: start replication
   hosts: github_replica
   gather_facts: false
-  roles: []
+  roles:
+    - role: ghe-repl-start
+      when: not hostvars['github_primary'].is_hotpatch
 
 - name: unset maintenance mode
   hosts: github_primary
