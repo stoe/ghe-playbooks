@@ -9,7 +9,7 @@
 ## pause the play to allow processes to finish gracefully
 - name: pause to let active processes finish
   pause:
-    ## defaults to 600 seconds (10 mins)
+    ## defaults to 600 seconds (10 minutes)
     seconds: "{{ sleep | default(600) }}"
   when:
     - maintenance_mode_set.rc is defined

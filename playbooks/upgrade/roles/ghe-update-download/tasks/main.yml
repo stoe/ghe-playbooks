@@ -20,7 +20,7 @@
     - is upgrade to new feature version
     - compare download pkg versions
 
-## run ghe-update-check to download the upgrade package
+## run `ghe-update-check` to download the upgrade package
 ## only executed if update pkg|hpkg wasn't downloaded automaticall/manually
 - name: download pkg
   command: ghe-update-check

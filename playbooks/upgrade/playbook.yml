@@ -1,11 +1,11 @@
 ---
-- name: get ghe version (primary)
+- name: get version (primary)
   hosts: github_primary
   gather_facts: false
   roles:
     - ghe-version
 
-- name: get ghe version (replica)
+- name: get version (replica)
   hosts: github_replica
   gather_facts: false
   roles:
@@ -35,9 +35,9 @@
   roles:
     - role: ghe-maintenance-set
       vars:
-        ## sleep X seconds
-        ## defaults to 600 seconds (10 mins) if not set
-        sleep: 5
+        ## sleep 300 seconds (5 minutes)
+        ## defaults to 600 seconds (10 minutes) if not set
+        sleep: 300
       when: not hostvars['github_primary'].is_hotpatch
 
 - name: stop replication
@@ -53,13 +53,13 @@
   roles:
     - backup-run
 
-- name: update ghe (primary)
+- name: upgrade (primary)
   hosts: github_primary
   gather_facts: false
   roles:
     - role: ghe-upgrade
 
-- name: update ghe (replica)
+- name: upgrade (replica)
   hosts: github_replica
   gather_facts: false
   roles:

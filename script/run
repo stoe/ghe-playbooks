@@ -2,8 +2,8 @@
 
 # script/run: Execute the playbook
 #
-#   Examples: script/run playbook.yml
-#             script/run playbook.yml -v
+#   Examples: script/run path/to/playbook.yml
+#             script/run path/to/playbook.yml -v
 
 set -e
 
