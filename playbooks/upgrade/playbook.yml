@@ -1,3 +1,4 @@
+---
 - name: get ghe version (primary)
   hosts: github_primary
   gather_facts: false
@@ -31,7 +32,13 @@
 - name: set maintenance mode
   hosts: github_primary
   gather_facts: false
-  roles: []
+  roles:
+    - role: ghe-maintenance-set
+      vars:
+        ## sleep X seconds
+        ## defaults to 600 seconds (10 mins) if not set
+        sleep: 5
+      when: not hostvars['github_primary'].is_hotpatch
 
 - name: create a backup
   hosts: github_backup
@@ -62,4 +69,6 @@
 - name: unset maintenance mode
   hosts: github_primary
   gather_facts: false
-  roles: []
+  roles:
+    - role: ghe-maintenance-unset
+      when: not hostvars['github_primary'].is_hotpatch

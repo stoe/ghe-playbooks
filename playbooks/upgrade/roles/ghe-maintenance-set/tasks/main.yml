@@ -1,0 +1,16 @@
+---
+## start maintenance mode
+- name: set maintenance mode
+  command: ghe-maintenance -s
+  register: maintenance_mode_set
+  changed_when: maintenance_mode_set.rc != 0
+  failed_when: maintenance_mode_set.rc != 0
+
+## pause the play to allow processes to finish gracefully
+- name: pause to let active processes finish
+  pause:
+    ## defaults to 600 seconds (10 mins)
+    seconds: "{{ sleep | default(600) }}"
+  when:
+    - maintenance_mode_set.rc is defined
+    - maintenance_mode_set.rc == 0
