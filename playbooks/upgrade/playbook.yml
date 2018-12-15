@@ -76,3 +76,18 @@
   roles:
     - role: ghe-maintenance-unset
       when: not hostvars['github_primary'].is_hotpatch
+
+- name: summarise plays
+  hosts: localhost
+  tasks:
+    - name: host messages
+      debug:
+        msg:
+          - "{{ hostvars[item].messages }}"
+      when:
+        - hostvars[item].messages is defined
+        - hostvars[item].messages | length
+      with_items:
+        - 'github_primary'
+        - 'github_replica'
+        - 'github_backup'
