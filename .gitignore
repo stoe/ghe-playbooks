@@ -1,7 +1,0 @@
-.venv/
-**/inventory
-**/inventory.yml
-**/vars/main.yml
-
-### Ansible ###
-*.retry
