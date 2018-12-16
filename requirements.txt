@@ -1,6 +1,0 @@
-ansible>=2.7
-ansible-lint
-awscli
-botocore
-boto3
-boto
