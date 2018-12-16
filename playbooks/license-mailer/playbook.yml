@@ -1,37 +1,10 @@
 ---
-- hosts: localhost
-  gather_facts: true
+- name: GitHub Enterprise license usage mailer
+  hosts: localhost
+  gather_facts: true	# required for `ansible_date_time` info
 
   vars_files:
-    - vars/main.yml
+    - vars/license-mailer.yml
 
-  tasks:
-    - name: get license details
-      ## see: https://docs.ansible.com/ansible/latest/modules/uri_module.html
-      uri:
-        ## https://developer.github.com/enterprise/v3/enterprise-admin/license/#get-license-information
-        url: "https://{{ ghe_host }}/api/v3/enterprise/settings/license"
-        method: GET
-        headers:
-          Authorization: "token {{ ghe_token }}"
-      register: ghe_license
-
-    - name: set license facts
-      set_fact:
-        expire_at: "{{ ghe_license.json.expire_at[:10] }}"
-        expire_days: "{{ ((ghe_license.json.expire_at[:10] | to_datetime(fmt)) - (ansible_date_time.date[:19] | to_datetime(fmt))).days }}"
-      vars:
-        fmt: '%Y-%m-%d'
-
-    - name: send license email
-      ## see: https://docs.ansible.com/ansible/latest/modules/mail_module.html
-      mail:
-        host: "{{ email_host }}"
-        port: "{{ email_port }}"
-        username: "{{ email_username }}"
-        password: "{{ email_password }}"
-        from: "{{ email_from }} (GHE License Mailer)"
-        to: "{{ email_to }}"
-        subject: "{{ email_company }}: GHE License usage report {{ ansible_date_time.date }}"
-        body: "{{ lookup('template', 'email.html.j2') }}"
-        subtype: html
+  roles:
+    - role: stoe.ghe_license_mailer

@@ -3,10 +3,10 @@ ghe_host: github.example.com
 ghe_token: 0000a0000a0000a0000a0000a0000a0000a0000a
 
 email_to: ansible@github.example.com
+email_from: no-reply@github.example.com
 email_company: 'ACME, Inc.'
 
-email_host: smtp.example.com
-email_port: 587
-email_username: null
-email_password: null
-email_from: no-reply@github.example.com
+smtp_host: smtp.example.com
+smtp_port: 25
+smtp_username: username
+smtp_password: PassW0rd!
