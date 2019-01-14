@@ -4,7 +4,8 @@
 
 
 ## Scripts
-_soon™_
+### [GitHub Enterprise Server suspend users](./scripts/suspend-users)
+> Suspend GitHub Enterprise Server users not belonging to any organization.
 
 
 ## Playbooks
