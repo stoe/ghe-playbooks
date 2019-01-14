@@ -1,5 +1,5 @@
 # suspend-users
-> Suspend GitHub Enterprise Server users not belonging to any organization.
+> Suspend [GitHub Enterprise Server](https://github.com/enterprise) users not belonging to any organization.
 
 
 ## Docker :whale: usage
