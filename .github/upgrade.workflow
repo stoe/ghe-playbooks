@@ -1,4 +1,4 @@
-workflow "Lint & Run Ansible on Push" {
+workflow "Lint Ansible Playbook on Push" {
   on = "push"
   resolves = ["DEBUG", "Lint Ansible Playbook"]
 }
