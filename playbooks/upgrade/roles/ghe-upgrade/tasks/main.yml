@@ -3,10 +3,10 @@
 ## this disconnects SSH for pkg upgrades,
 ## so we need to ignore any error and
 ## wait for it to be available again
-- name: upgrade to v{{ hostvars[inventory_hostname].pkg_version_full }}
+- name: upgrade to v{{ hostvars[inventory_hostname].pkg_full }}
   command: "ghe-upgrade --yes {{ hostvars[inventory_hostname].pkg_filepath }}"
   ignore_errors: yes
-  register: ghe_upgraded
+  register: gh_upgraded
   changed_when: true
   notify:
     - hpkg reboot required

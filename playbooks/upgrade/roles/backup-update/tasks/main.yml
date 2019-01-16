@@ -4,7 +4,7 @@
 - name: update backup utils
   git:
     repo: https://github.com/github/backup-utils.git
-    dest: "{{ hostvars['github_backup']['home_dir'] }}"
+    dest: "{{ hostvars['backup']['home_dir'] }}"
     version: stable
     update: yes
     force: yes

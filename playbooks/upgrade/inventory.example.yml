@@ -15,16 +15,16 @@ all:
         ansible_user: admin
         ansible_ssh_private_key_file: /path/to/id_rsa
       hosts:
-        github_primary:
+        primary:
           ansible_host: github.example.com
-        github_replica:
+        replica:
           ansible_host: 1.1.1.1
-    backup:
+    backup-utils:
       vars:
         home_dir: '~/backup-utils'
         data_dir: '~/backup-utils/data'
       hosts:
-        github_backup:
+        backup:
           ansible_user: ubuntu
           ansible_host: 2.2.2.2
           ansible_ssh_private_key_file: /path/to/id_rsa

@@ -2,17 +2,17 @@
 ## check replication status
 - name: get replication status
   command: ghe-repl-status
-  register: ghe_repl_status
+  register: gh_repl_status
   changed_when: false
   ## 0, no errors -> continue
   ## 1, status warnings exist -> continue
   ## 2, status errors exist -> fail
-  failed_when: ghe_repl_status.rc >= 2
+  failed_when: gh_repl_status.rc >= 2
 
 ## stop replication, only if it's running
 - name: stop replication
   command: ghe-repl-stop
-  register: ghe_repl_stop
-  failed_when: ghe_repl_stop.rc != 0
+  register: gh_repl_stop
+  failed_when: gh_repl_stop.rc != 0
   when:
-    - '"Error" not in ghe_repl_status.stdout'
+    - '"Error" not in gh_repl_status.stdout'

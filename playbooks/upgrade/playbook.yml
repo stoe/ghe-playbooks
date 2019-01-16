@@ -1,36 +1,36 @@
 ---
 - name: get version (primary)
-  hosts: github_primary
+  hosts: primary
   gather_facts: false
   roles:
     - ghe-version
 
 - name: get version (replica)
-  hosts: github_replica
+  hosts: replica
   gather_facts: false
   roles:
     - ghe-version
 
 - name: check/download update package (primary)
-  hosts: github_primary
+  hosts: primary
   gather_facts: false
   roles:
     - ghe-update-download
 
 - name: check/download update package (replica)
-  hosts: github_replica
+  hosts: replica
   gather_facts: false
   roles:
     - ghe-update-download
 
 - name: update backup-utils
-  hosts: github_backup
+  hosts: backup
   gather_facts: false
   roles:
     - backup-update
 
 - name: set maintenance mode
-  hosts: github_primary
+  hosts: primary
   gather_facts: false
   roles:
     - role: ghe-maintenance-set
@@ -38,55 +38,55 @@
         ## sleep 300 seconds (5 minutes)
         ## defaults to 600 seconds (10 minutes) if not set
         sleep: 300
-      when: not hostvars['github_primary'].is_hotpatch
+      when: not hostvars['primary'].is_hotpatch
 
 - name: stop replication
-  hosts: github_replica
+  hosts: replica
   gather_facts: false
   roles:
     - role: ghe-repl-stop
-      when: not hostvars['github_primary'].is_hotpatch
+      when: not hostvars['primary'].is_hotpatch
 
 - name: create a backup
-  hosts: github_backup
+  hosts: backup
   gather_facts: false
   roles:
     - backup-run
 
 - name: upgrade (primary)
-  hosts: github_primary
+  hosts: primary
   gather_facts: false
   roles:
     - role: ghe-upgrade
 
 - name: upgrade (replica)
-  hosts: github_replica
+  hosts: replica
   gather_facts: false
   roles:
     - role: ghe-upgrade
 
 - name: start replication
-  hosts: github_replica
+  hosts: replica
   gather_facts: false
   roles:
     - role: ghe-repl-start
-      when: not hostvars['github_primary'].is_hotpatch
+      when: not hostvars['primary'].is_hotpatch
 
 - name: unset maintenance mode
-  hosts: github_primary
+  hosts: primary
   gather_facts: false
   roles:
     - role: ghe-maintenance-unset
-      when: not hostvars['github_primary'].is_hotpatch
+      when: not hostvars['primary'].is_hotpatch
 
 - name: cleanup (primary)
-  hosts: github_primary
+  hosts: primary
   gather_facts: false
   roles:
     - role: ghe-cleanup
 
 - name: cleanup (replica)
-  hosts: github_replica
+  hosts: replica
   gather_facts: false
   roles:
     - role: ghe-cleanup
@@ -102,6 +102,6 @@
         - hostvars[item].messages is defined
         - hostvars[item].messages | length
       with_items:
-        - 'github_primary'
-        - 'github_replica'
-        - 'github_backup'
+        - 'primary'
+        - 'replica'
+        - 'backup'
