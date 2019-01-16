@@ -1,7 +1,8 @@
 ---
 - name: GitHub Enterprise license usage mailer
   hosts: localhost
-  gather_facts: true	# required for `ansible_date_time` info
+  # required for `ansible_date_time` info
+  gather_facts: true
 
   vars_files:
     - vars/license-mailer.yml
