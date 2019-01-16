@@ -1,6 +1,9 @@
 
-# Created by https://www.gitignore.io/api/node
-# Edit at https://www.gitignore.io/?templates=node
+# Created by https://www.gitignore.io/api/ansible,node
+# Edit at https://www.gitignore.io/?templates=ansible,node
+
+### Ansible ###
+*.retry
 
 ### Node ###
 # Logs
@@ -61,6 +64,7 @@ typings/
 
 # dotenv environment variables file
 .env
+.env.test
 
 # parcel-bundler cache (https://parceljs.org/)
 .cache
@@ -80,7 +84,7 @@ typings/
 # FuseBox cache
 .fusebox/
 
-#DynamoDB Local files
+# DynamoDB Local files
 .dynamodb/
 
-# End of https://www.gitignore.io/api/node
+# End of https://www.gitignore.io/api/ansible,node
