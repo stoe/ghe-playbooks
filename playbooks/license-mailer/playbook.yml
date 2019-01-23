@@ -1,5 +1,5 @@
 ---
-- name: GitHub Enterprise license usage mailer
+- name: GitHub Enterprise Server license usage mailer
   hosts: localhost
   # required for `ansible_date_time` info
   gather_facts: true
