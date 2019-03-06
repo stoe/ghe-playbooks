@@ -41,7 +41,7 @@
   when:
     - pkg_download_files is defined
     - pkg_download_files.stdout is defined
-    - '"Your GitHub Enterprise Server install is currently on the latest release." not in pkg_download_files.stdout'
+    - '"Your GitHub Enterprise install is currently on the latest release." not in pkg_download_files.stdout'
 
 - name: parse pkg file info
   debug:
@@ -62,7 +62,7 @@
   when:
     - pkg_download_files is defined
     - pkg_download_files.stdout is defined
-    - '"Your GitHub Enterprise Server install is currently on the latest release." in pkg_download_files.stdout'
+    - '"Your GitHub Enterprise install is currently on the latest release." in pkg_download_files.stdout'
 
 - name: is upgrade to new feature version
   fail:

@@ -32,4 +32,4 @@
   changed_when:
     - '"Completed backup of " in backup_run.stdout'
   failed_when:
-    - '"Error" in backup_run.stdout'
+    - '"Error" in backup_run.stderr or backup_run.rc > 0'
