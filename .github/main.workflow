@@ -4,14 +4,14 @@ workflow "Lint Playbooks on Push" {
 }
 
 action "Lint License Mailer Playbook" {
-  uses = "ansible/ansible-lint/.github/action@master"
+  uses = "ansible/ansible-lint-action@master"
   env = {
     ACTION_PLAYBOOK_NAME = "playbooks/license-mailer/playbook.yml"
   }
 }
 
 action "Lint Upgrade Playbook" {
-  uses = "ansible/ansible-lint/.github/action@master"
+  uses = "ansible/ansible-lint-action@master"
   env = {
     ACTION_PLAYBOOK_NAME = "playbooks/upgrade/playbook.yml"
   }
