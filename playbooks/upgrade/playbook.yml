@@ -1,4 +1,10 @@
 ---
+- hosts: all
+  gather_facts: false
+  tasks:
+    - name: Wait connections to become reachable/usable
+      wait_for_connection:
+
 - name: get version (primary)
   hosts: primary
   gather_facts: false
