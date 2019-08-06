@@ -1,62 +1,43 @@
-"use strict";
+'use strict';
 
-require("dotenv").config();
+require('dotenv').config();
 
 const bunyan = require('bunyan');
-const bunyanFormat = require('bunyan-format');
-const github = require("gh-got");
-
-const token = process.env.GHE_TOKEN;
-const headers = {
-  authorization: `bearer ${token}`,
-  "content-type": "application/json",
-  "user-agent": "monthly user cleanup"
-};
+const bformat = require('bunyan-format');
 
 const log = bunyan.createLogger({
   name: 'suspend-users',
-  level: process.env.LOG_LEVEL || 'info',
-  stream: bunyanFormat({
-    outputMode: 'short'
-  })
+  stream: bformat({outputMode: 'short'}),
+  level: process.env.LOG_LEVEL || 'info'
 });
 
-const getResponse = async query => {
-  const { body } = await github("graphql", {
-    json: true,
-    headers,
-    body: { query }
-  });
-
-  if (body.errors && body.errors.length > 0) {
-    throw body.errors[0];
+const graphql = require('@octokit/graphql').defaults({
+  baseUrl: process.env.GHES_HOST,
+  headers: {
+    authorization: `bearer ${process.env.GHES_TOKEN}`
   }
+});
 
-  return body.data;
-};
-
-const getUsersQuery = (after = null) => {
-  return `query {
-    users(first: 100, after: ${after}) {
-      pageInfo {
-        hasNextPage
-        endCursor
-      }
-      nodes {
-        login
-        suspendedAt
-        isSiteAdmin
-        organizations(first: 1) {
-          totalCount
+async function* getAllUsers(users, after = null) {
+  const {users: data} = await graphql({
+    query: `query ($after: String) {
+      users(first: 100, after: $after) {
+        pageInfo {
+          hasNextPage
+          endCursor
+        }
+        nodes {
+          login
+          suspendedAt
+          isSiteAdmin
+          organizations(first: 1) {
+            totalCount
+          }
         }
       }
-    }
-  }`;
-};
-
-async function * getAllUsers(users, page = null) {
-  const query = getUsersQuery(page);
-  const { users: data } = await getResponse(query);
+    }`,
+    after
+  });
 
   data.nodes.map(user => users.push(user));
 
@@ -65,7 +46,7 @@ async function * getAllUsers(users, page = null) {
   }
 
   yield users;
-};
+}
 
 (async () => {
   try {
@@ -74,31 +55,19 @@ async function * getAllUsers(users, page = null) {
     await getAllUsers(users).next();
 
     users.map(async user => {
-      const { login, suspendedAt, isSiteAdmin, organizations } = user;
+      const {login, suspendedAt, isSiteAdmin, organizations} = user;
 
       if (
-        login !== "ghost" &&
+        login !== 'ghost' &&
         suspendedAt === null &&
         isSiteAdmin !== true &&
-        organizations.totalCount === 0
+        organizations.totalCount <= 1
       ) {
-        const { body } = await github.put(`v3/users/${login}/suspended`, {
-          json: true,
-          headers,
-          body: {
-            reason: "Suspended via monthly user cleanup"
-          }
-        });
-
-        if (body.errors && body.errors.length > 0) {
-          log.error(body.errors);
-          throw body.errors[0];
-        }
+        // TODO
 
         log.info(`${login} suspended`);
       } else {
         log.info(`${login} skipped`);
-        log.debug(user);
       }
     });
   } catch (error) {

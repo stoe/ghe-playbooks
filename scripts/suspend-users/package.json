@@ -8,9 +8,9 @@
     "start": "node ./index.js"
   },
   "dependencies": {
+    "@octokit/graphql": "^3.0.1",
     "bunyan": "^1.8.12",
     "bunyan-format": "^0.2.1",
-    "dotenv": "^6.2.0",
-    "gh-got": "^8.0.1"
+    "dotenv": "^8.0.0"
   }
 }
