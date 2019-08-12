@@ -19,7 +19,7 @@ all:
           ansible_host: github.example.com
         replica:
           ansible_host: 1.1.1.1
-    backup-utils:
+    backup_utils:
       vars:
         home_dir: '~/backup-utils'
         data_dir: '~/backup-utils/data'
