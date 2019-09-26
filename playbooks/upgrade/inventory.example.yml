@@ -20,9 +20,6 @@ all:
         replica:
           ansible_host: 1.1.1.1
     backup_utils:
-      vars:
-        home_dir: '~/backup-utils'
-        data_dir: '~/backup-utils/data'
       hosts:
         backup:
           ansible_user: ubuntu
