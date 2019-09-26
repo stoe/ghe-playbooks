@@ -1,7 +1,9 @@
 ---
 all:
   vars:
+    ansible_user: admin
     ansible_ssh_common_args: -o StrictHostKeyChecking=no
+    ansible_ssh_private_key_file: /path/to/id_rsa
     # we use this field to store messages to display at the end of the play
     messages: []
   children:
@@ -12,8 +14,6 @@ all:
     ghe:
       vars:
         ansible_port: 122
-        ansible_user: admin
-        ansible_ssh_private_key_file: /path/to/id_rsa
       hosts:
         primary:
           ansible_host: github.example.com
@@ -22,6 +22,4 @@ all:
     backup_utils:
       hosts:
         backup:
-          ansible_user: ubuntu
           ansible_host: 2.2.2.2
-          ansible_ssh_private_key_file: /path/to/id_rsa

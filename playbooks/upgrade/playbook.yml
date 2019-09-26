@@ -1,5 +1,8 @@
 ---
-- hosts: all
+- hosts:
+    - primary
+    - replica
+    - backup
   gather_facts: false
   tasks:
     - name: Wait connections to become reachable/usable
