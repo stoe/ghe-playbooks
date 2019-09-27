@@ -68,16 +68,11 @@
   roles:
     - role: ghe-upgrade
 
-- name: upgrade (replica)
+- name: upgrade (replica) and start replication
   hosts: replica
   gather_facts: false
   roles:
     - role: ghe-upgrade
-
-- name: start replication
-  hosts: replica
-  gather_facts: false
-  roles:
     - role: ghe-repl-start
       when: not hostvars['primary'].is_hotpatch
 
@@ -88,14 +83,10 @@
     - role: ghe-maintenance-unset
       when: not hostvars['primary'].is_hotpatch
 
-- name: cleanup (primary)
-  hosts: primary
-  gather_facts: false
-  roles:
-    - role: ghe-cleanup
-
-- name: cleanup (replica)
-  hosts: replica
+- name: cleanup
+  hosts:
+    - primary
+    - replica
   gather_facts: false
   roles:
     - role: ghe-cleanup
