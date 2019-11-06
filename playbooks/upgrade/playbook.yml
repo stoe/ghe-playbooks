@@ -7,7 +7,7 @@
     - backup
   gather_facts: no
   tasks:
-    - name: wait for connections
+    - name: wait for connections to become reachable/usable
       # http://docs.ansible.com/ansible/wait_for_connection_module.html
       wait_for_connection:
         delay: 5
