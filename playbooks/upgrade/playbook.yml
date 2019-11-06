@@ -1,33 +1,78 @@
 ---
+- name: connections
+  hosts:
+    - primary
+    - replica
+    - geo
+    - backup
+  gather_facts: no
+  tasks:
+    - name: wait for connections
+      # http://docs.ansible.com/ansible/wait_for_connection_module.html
+      wait_for_connection:
+        delay: 5
+        sleep: 5
+        timeout: 300
+      ignore_errors: yes
+      register: play_hosts
+  tags:
+    - always
+
 - name: get version (primary)
   hosts: primary
   gather_facts: false
   roles:
-    - ghe-version
+    - role: ghe-version
+      when:
+        - not hostvars['primary'].play_hosts.failed
 
 - name: get version (replica)
   hosts: replica
   gather_facts: false
   roles:
-    - ghe-version
+    - role: ghe-version
+      when:
+        - not hostvars['replica'].play_hosts.failed
+
+- name: get version (geo)
+  hosts: geo
+  gather_facts: false
+  roles:
+    - role: ghe-version
+      when:
+        - not hostvars['geo'].play_hosts.failed
 
 - name: check/download update package (primary)
   hosts: primary
   gather_facts: false
   roles:
-    - ghe-update-download
+    - role: ghe-update-download
+      when:
+        - not hostvars['primary'].play_hosts.failed
 
 - name: check/download update package (replica)
   hosts: replica
   gather_facts: false
   roles:
-    - ghe-update-download
+    - role: ghe-update-download
+      when:
+        - not hostvars['replica'].play_hosts.failed
+
+- name: check/download update package (geo)
+  hosts: geo
+  gather_facts: false
+  roles:
+    - role: ghe-update-download
+      when:
+        - not hostvars['geo'].play_hosts.failed
 
 - name: update backup-utils
   hosts: backup
   gather_facts: false
   roles:
-    - backup-update
+    - role: backup-update
+      when:
+        - not hostvars['backup'].play_hosts.failed
 
 - name: set maintenance mode
   hosts: primary
@@ -38,58 +83,119 @@
         ## sleep 300 seconds (5 minutes)
         ## defaults to 600 seconds (10 minutes) if not set
         sleep: 300
-      when: not hostvars['primary'].is_hotpatch
+      when:
+        - not hostvars['primary'].is_hotpatch
+        - not hostvars['primary'].play_hosts.failed
 
 - name: stop replication
   hosts: replica
   gather_facts: false
   roles:
     - role: ghe-repl-stop
-      when: not hostvars['primary'].is_hotpatch
+      when:
+        - not hostvars['primary'].is_hotpatch
+        - not hostvars['replica'].play_hosts.failed
+
+- name: stop replication
+  hosts: geo
+  gather_facts: false
+  roles:
+    - role: ghe-repl-stop
+      when:
+        - not hostvars['primary'].is_hotpatch
+        - not hostvars['primary'].play_hosts.failed
 
 - name: create a backup
   hosts: backup
   gather_facts: false
   roles:
-    - backup-run
+    - role: backup-run
+      when:
+        - not hostvars['backup'].play_hosts.failed
 
 - name: upgrade (primary)
   hosts: primary
   gather_facts: false
   roles:
     - role: ghe-upgrade
+      when:
+        - not hostvars['primary'].play_hosts.failed
+    - role: wait
+      when:
+        - not hostvars['primary'].play_hosts.failed
 
 - name: upgrade (replica)
   hosts: replica
   gather_facts: false
   roles:
     - role: ghe-upgrade
+      when:
+        - not hostvars['replica'].play_hosts.failed
+    - role: wait
+      when:
+        - not hostvars['replica'].play_hosts.failed
+
+- name: upgrade (geo)
+  hosts: geo
+  gather_facts: false
+  roles:
+    - role: ghe-upgrade
+      when:
+        - not hostvars['geo'].play_hosts.failed
+    - role: wait
+      when:
+        - not hostvars['geo'].play_hosts.failed
 
 - name: start replication
   hosts: replica
   gather_facts: false
   roles:
     - role: ghe-repl-start
-      when: not hostvars['primary'].is_hotpatch
+      when:
+        - not hostvars['primary'].is_hotpatch
+        - not hostvars['primary'].play_hosts.failed
 
-- name: unset maintenance mode
-  hosts: primary
+- name: start replication
+  hosts: geo
   gather_facts: false
   roles:
-    - role: ghe-maintenance-unset
-      when: not hostvars['primary'].is_hotpatch
+    - role: ghe-repl-start
+      when:
+        - not hostvars['primary'].is_hotpatch
+        - not hostvars['primary'].play_hosts.failed
+
+# - name: unset maintenance mode
+#   hosts: primary
+#   gather_facts: false
+#   roles:
+#     - role: ghe-maintenance-unset
+#       when:
+#         - not hostvars['primary'].is_hotpatch
+#         - not hostvars['primary'].play_hosts.failed
 
 - name: cleanup (primary)
   hosts: primary
   gather_facts: false
   roles:
     - role: ghe-cleanup
+      when:
+        - not hostvars['primary'].play_hosts.failed
 
 - name: cleanup (replica)
   hosts: replica
   gather_facts: false
   roles:
     - role: ghe-cleanup
+      when:
+        - not hostvars['replica'].play_hosts.failed
+
+- name: cleanup (geo)
+  hosts: geo
+  gather_facts: false
+  roles:
+    - role: ghe-cleanup
+      when:
+        - not hostvars['geo'].play_hosts.failed
 
 - name: summarise plays
   hosts: localhost
@@ -104,4 +210,5 @@
       with_items:
         - 'primary'
         - 'replica'
+        - 'geo'
         - 'backup'

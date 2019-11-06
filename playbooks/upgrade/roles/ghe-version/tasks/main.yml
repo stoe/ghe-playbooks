@@ -7,4 +7,5 @@
   notify:
     - save ghe version info
     - parse ghe version info
-    - compare ghe versions
+    - compare ghe primary and replica versions
+    - compare ghe replica versions

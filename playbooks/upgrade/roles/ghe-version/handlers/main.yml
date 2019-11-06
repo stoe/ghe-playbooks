@@ -22,10 +22,18 @@
       - version_patch: '{{ hostvars[inventory_hostname].version_patch }}'
     verbosity: 1
 
-- name: compare ghe versions
+- name: compare ghe primary and replica versions
   fail:
     msg: "[ABORT] primary v{{ hostvars['primary'].version_full }} !== replica v{{ hostvars['replica'].version_full }}"
   when:
     - hostvars['primary'].version_full is defined
     - hostvars['replica'].version_full is defined
     - hostvars['primary'].version_full != hostvars['replica'].version_full
+
+- name: compare ghe replica versions
+  fail:
+    msg: "[ABORT] replica v{{ hostvars['replica'].version_full }} !== geo v{{ hostvars['geo'].version_full }}"
+  when:
+    - hostvars['replica'].version_full is defined
+    - hostvars['geo'].version_full is defined
+    - hostvars['replica'].version_full != hostvars['geo'].version_full

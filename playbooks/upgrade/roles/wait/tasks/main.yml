@@ -1,0 +1,19 @@
+---
+- name: wait for connections
+  # http://docs.ansible.com/ansible/wait_for_connection_module.html
+  wait_for_connection:
+    delay: 10
+    sleep: 5
+    timeout: 300
+  ignore_errors: yes
+
+- name: wait for frontend admin port to come up (port 8443)
+  # http://docs.ansible.com/ansible/wait_for_module.html
+  wait_for:
+    host: "{{ ansible_host }}"
+    port: 8443
+    delay: 10
+    sleep: 5
+    timeout: 300
+    state: started
+  changed_when: false
