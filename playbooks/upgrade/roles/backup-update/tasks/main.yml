@@ -23,7 +23,7 @@
 
 - name: backup utils version
   set_fact:
-    messages: "{{ messages }} + ['[INFO]: upgraded backup utils from {{ backup_utils_version_before.stdout }} to {{ backup_utils_version_after.stdout }}']"
+    messages: "{{ messages }} + [ 'update to v{{ backup_utils_version_after.stdout }}' ]"
   when:
     - backup_utils_version_before is defined
     - backup_utils_version_after is defined

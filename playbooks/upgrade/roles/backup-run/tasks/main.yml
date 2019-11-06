@@ -36,4 +36,4 @@
 
 - name: backup utils info
   set_fact:
-    messages: "{{ messages }} + ['[INFO]: {{ backup_run.stdout }}']"
+    messages: "{{ messages }} + [ '{{ backup_run.stdout }}' ]"
