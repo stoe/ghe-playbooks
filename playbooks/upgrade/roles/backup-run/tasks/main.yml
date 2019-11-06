@@ -8,8 +8,8 @@
     state: directory
     path: '{{ item }}'
   with_items:
-    - "{{ hostvars.backup.home_dir }}"
-    - "{{ hostvars.backup.data_dir }}"
+    - "{{ backup_home_dir }}"
+    - "{{ backup_data_dir }}"
   become: no
 
 ## wait untill no backup process is running
@@ -17,7 +17,7 @@
 - name: wait for backup utils to finish
   ## see: http://docs.ansible.com/ansible/latest/modules/wait_for_module.html
   wait_for:
-    path: "{{ hostvars.backup.data_dir }}/in-progress"
+    path: "{{ backup_data_dir }}/in-progress"
     ## retry every 10 seconds
     delay: 10
     ## timeout after 300 seconds (5 minutes)
@@ -27,7 +27,7 @@
 
 ## create a backup
 - name: run ghe backup utils
-  command: "{{ hostvars.backup.home_dir }}/bin/ghe-backup"
+  command: "{{ backup_home_dir }}/bin/ghe-backup"
   register: backup_run
   changed_when:
     - '"Completed backup of " in backup_run.stdout'
