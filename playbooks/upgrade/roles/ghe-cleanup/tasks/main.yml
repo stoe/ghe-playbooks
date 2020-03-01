@@ -1,9 +1,0 @@
----
-## ensure we delete the package files after a successful upgrade
-- name: delete upgrade (h)pkg file
-  file:
-    path: "{{ hostvars[inventory_hostname].pkg_filepath }}"
-    state: absent
-  become: yes
-  when:
-    - hostvars[inventory_hostname].pkg_filepath is defined
