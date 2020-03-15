@@ -2,13 +2,9 @@ name: Ansible Lint
 
 on:
   push:
-    branches:
-      - master
     paths:
       - playbooks/
   pull_request:
-    branches:
-      - master
     paths:
       - playbooks/
 
