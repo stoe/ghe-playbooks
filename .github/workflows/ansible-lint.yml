@@ -1,0 +1,24 @@
+name: Ansible Lint
+
+on:
+  push:
+    branches:
+      - master
+    paths:
+      - playbooks/
+  pull_request:
+    branches:
+      - master
+    paths:
+      - playbooks/
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: ansible-lint
+        uses: ansible/ansible-lint-action@v4
+        with:
+          targets: |
+            playbooks/licemse-mailer/playbook.yml
