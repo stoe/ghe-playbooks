@@ -2,11 +2,11 @@ name: Ansible Lint
 
 on:
   push:
-    paths:
-      - "playbooks/**/*.yml"
+    branches:
+      - master
   pull_request:
-    paths:
-      - "playbooks/**/*.yml"
+    branches:
+      - master
 
 jobs:
   lint:
@@ -17,4 +17,4 @@ jobs:
       - uses: ansible/ansible-lint-action@master
         with:
           targets: |
-            playbooks/licemse-mailer/playbook.yml
+            playbooks/license-mailer/playbook.yml
