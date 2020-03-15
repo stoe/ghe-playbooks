@@ -4,8 +4,14 @@
   # required for `ansible_date_time` info
   gather_facts: true
 
-  vars_files:
-    - vars/license-mailer.yml
-
   roles:
     - role: stoe.ghe_license_mailer
+      ghe_host: github.example.com
+      ghe_token: 0000a0000a0000a0000a0000a0000a0000a0000a
+      email_to: ansible@github.example.com
+      email_from: no-reply@github.example.com
+      email_company: 'ACME, Inc.'
+      smtp_host: smtp.example.com
+      smtp_port: 25
+      smtp_username: username
+      smtp_password: PassW0rd!
