@@ -3,10 +3,10 @@ name: Ansible Lint
 on:
   push:
     paths:
-      - playbooks/
+      - "playbooks/**/*.yml"
   pull_request:
     paths:
-      - playbooks/
+      - "playbooks/**/*.yml"
 
 jobs:
   lint:
